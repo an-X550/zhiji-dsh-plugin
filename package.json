@@ -1,13 +1,16 @@
 {
   "name": "zhiji-dsh-plugin",
-  "version": "0.1.0",
-  "description": "知己每日复盘的 DeepSeek Harness Bundle MVP",
+  "version": "0.2.0",
+  "description": "知己每日、周、月和项目复盘的 DeepSeek Harness Bundle",
   "type": "module",
   "main": "index.js",
   "files": [
     "index.js",
     "cordis.patch.yml",
     "skills/daily-review.md",
+    "skills/weekly-review.md",
+    "skills/monthly-review.md",
+    "skills/project-review.md",
     "README.md"
   ],
   "dsh": {

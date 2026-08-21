@@ -1,0 +1,8 @@
+- id: agent-default-model
+  config:
+    provider: zhiji-s2-fixture
+    model: zhiji-s2-fixture
+
+- insert:
+    - id: zhiji-dsh-s2-fixture-llm
+      name: './tests/fixtures/dsh-s2-mock-llm.mjs'

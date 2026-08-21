@@ -15,7 +15,7 @@ test('package is a minimal DSH Bundle without install-time code or runtime depen
   const manifest = JSON.parse(await read('package.json'))
   const patch = await read('cordis.patch.yml')
   assert.equal(manifest.name, 'zhiji-dsh-plugin')
-  assert.equal(manifest.version, '0.1.0')
+  assert.equal(manifest.version, '0.2.0')
   assert.deepEqual(manifest.dsh, { bundle: { patch: './cordis.patch.yml' } })
   assert.deepEqual(manifest.dependencies ?? {}, {})
   assert.deepEqual(manifest.optionalDependencies ?? {}, {})
@@ -25,21 +25,37 @@ test('package is a minimal DSH Bundle without install-time code or runtime depen
   assert.match(patch, /inject: \[skills\]/)
 })
 
-test('registers one embedded user- and model-invocable Skill', async () => {
+test('registers daily and periodic embedded user- and model-invocable Skills', async () => {
   const registrations = []
   const plugin = await import(pathToFileURL(path.join(packageRoot, 'index.js')).href)
   plugin.apply({ skills: { register(skill) { registrations.push(skill); return () => {} } } })
 
   assert.deepEqual(plugin.inject, ['skills'])
-  assert.equal(registrations.length, 1)
-  assert.equal(registrations[0].name, 'zhiji-daily-review')
-  assert.equal(registrations[0].source, 'bundled')
-  assert.match(registrations[0].description, /一个主要洞察/)
+  assert.equal(registrations.length, 4)
+  assert.deepEqual(registrations.map((skill) => skill.name), [
+    'zhiji-daily-review',
+    'zhiji-weekly-review',
+    'zhiji-monthly-review',
+    'zhiji-project-review',
+  ])
+  for (const skill of registrations) {
+    assert.equal(skill.source, 'bundled')
+    assert.match(skill.description, /复盘/)
+    assert.match(skill.content, /不读取或扫描/)
+    assert.match(skill.content, /证据不足/)
+  }
   assert.match(registrations[0].content, /📌 事实/)
   assert.match(registrations[0].content, /🔍 主要洞察/)
   assert.match(registrations[0].content, /⚡ 单一行动/)
-  assert.match(registrations[0].content, /不读取或扫描/)
-  assert.match(registrations[0].content, /证据不足/)
+  for (const [index, heading] of [
+    '## 六、下周规划',
+    '## 六、下月规划',
+    '## 六、后续规划',
+  ].entries()) {
+    assert.match(registrations[index + 1].content, /## 一、回顾目标/)
+    assert.match(registrations[index + 1].content, /## 质量自检/)
+    assert.match(registrations[index + 1].content, new RegExp(heading))
+  }
 })
 
 test('fixture contains a dated first-person event and the expected value shape', async () => {
