@@ -1,8 +1,9 @@
 param(
-  [string]$DshRoot = 'D:\AI\deepseek-harness'
+  [string]$DshRoot = $env:DSH_SOURCE_ROOT
 )
 
 $ErrorActionPreference = 'Stop'
+if ([string]::IsNullOrWhiteSpace($DshRoot)) { throw 'DSH source root is required; pass -DshRoot or set DSH_SOURCE_ROOT.' }
 $packageRoot = Split-Path -Parent $PSScriptRoot
 $dshCli = Join-Path $DshRoot 'apps\cli\lib\bin.js'
 $fixtureRoot = Join-Path $packageRoot 'tests\fixtures'

@@ -38,11 +38,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/an-X550/knowing-yourself.git",
-    "directory": "apps/zhiji-dsh-plugin"
+    "url": "git+https://github.com/an-X550/zhiji-dsh-plugin.git"
   },
   "bugs": {
-    "url": "https://github.com/an-X550/knowing-yourself/issues"
+    "url": "https://github.com/an-X550/zhiji-dsh-plugin/issues"
   },
-  "homepage": "https://github.com/an-X550/knowing-yourself/tree/main/apps/zhiji-dsh-plugin"
+  "homepage": "https://github.com/an-X550/zhiji-dsh-plugin"
 }

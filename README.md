@@ -35,12 +35,14 @@ Tool 只读取配置根目录的顶层 Markdown 文件：支持 `YYYY-MM-DD.md` 
 ## 开发
 
 ```powershell
-cd C:\path\to\zhiji\apps\zhiji-dsh-plugin
+cd C:\path\to\zhiji-dsh-plugin
 npm test
 npm pack --pack-destination .\dist
 ```
 
 包没有 `install`、`prepare` 或 `build` 脚本，不含 native dependency，也不主动联网。
+
+验证脚本需要一个可运行的 DSH 源码检出目录。请通过 `-DshRoot` 传入，或设置 `DSH_SOURCE_ROOT`；该目录只用于验证，不是插件运行时依赖。
 
 ## 安装到 DSH Profile
 
@@ -78,7 +80,7 @@ dsh --profile web --no-open
 
 ## 发布准备元数据
 
-package manifest 已包含 `dsh-plugin`、`deepseek-harness` 等关键词、公开访问声明、仓库目录和 Node/DSH 兼容版本。当前只生成本地 tarball 供验证；本项目没有执行 npm publish、GitHub Release、远程 push 或外部市场提交。
+package manifest 已包含 `dsh-plugin`、`deepseek-harness` 等关键词、公开访问声明、独立仓库地址和 Node/DSH 兼容版本。当前仓库已完成本地 tarball 验证；npm publish、GitHub Release 和外部市场提交仍需单独决定。
 
 ## 兼容版本
 
