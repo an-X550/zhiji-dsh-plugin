@@ -1,0 +1,7 @@
+# The smallest zhiji Bundle: register one embedded runtime Skill.
+# DSH base already provides the skills registry, skill catalog/tool, and Web
+# user-invocation surface; this package contributes no host Tool or UI row.
+- insert:
+    - id: zhiji-daily-review-skill
+      name: zhiji-dsh-plugin
+      inject: [skills]

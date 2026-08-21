@@ -1,0 +1,22 @@
+{
+  "name": "zhiji-dsh-plugin",
+  "version": "0.1.0",
+  "description": "知己每日复盘的 DeepSeek Harness Bundle MVP",
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "cordis.patch.yml",
+    "skills/daily-review.md",
+    "README.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "scripts": {
+    "test": "node --test tests/plugin-contract.test.mjs"
+  },
+  "license": "MIT"
+}
