@@ -1,98 +1,200 @@
-# zhiji-dsh-plugin
+# 知己 DSH Plugin
 
-`zhiji-dsh-plugin` 是知己每日、周、月和项目复盘的 DeepSeek Harness Bundle。它面向已经安装 DSH 的用户，使用 DSH 官方 Profile、Bundle、Skill Registry、Tool Registry 和 Web UI；它不改造知己桌面端，也不把桌面端当作运行依赖。
+> 为 DeepSeek Harness 增加四个有证据边界的复盘 Skill，以及一个受控的只读日志范围 Tool。
 
-## 能力边界
+`zhiji-dsh-plugin` 是一个安装到 DSH Profile 的 Node 插件包。它把知己的每日、每周、每月和项目复盘入口注册到 DSH Web UI；它不提供模型、API Key 或独立 Web UI，也不依赖知己 Windows 桌面端才能运行。
 
-用户可以在 DSH Web UI 中粘贴材料，输入对应入口得到会话内复盘：
+- 当前包版本：`0.3.1`
+- [GitHub 仓库](https://github.com/an-X550/zhiji-dsh-plugin)
+- [下载与 Releases](https://github.com/an-X550/zhiji-dsh-plugin/releases)
+- [提交问题](https://github.com/an-X550/zhiji-dsh-plugin/issues)
+- 许可证：MIT，见 [LICENSE](LICENSE)
 
-- `/zhiji-daily-review`：单日事实、一个洞察、一个小行动和明天验证；
-- `/zhiji-weekly-review`：一周趋势、偏差、关键变化和下周验证；
-- `/zhiji-monthly-review`：月度主题、趋势与反例，以及下月检查点和假说；
-- `/zhiji-project-review`：项目目标、结果、过程、偏差和后续行动。
+## 先判断它是否适合你
 
-四种入口都区分事实、推断和建议；材料不足时明确降级，不把多篇材料机械拼成摘要。结果只留在 DSH 会话中，不写知己正式反馈、验证库或桌面端数据。
+这个插件适合你，如果：
 
-每日复盘继续只消费当前会话中的单日日志。周/月/项目复盘既支持粘贴材料，也支持用户明确要求读取已配置的日志根目录；后者只通过 `zhiji_read_journal_range` 读取一个明确日期范围，再交给对应 Skill 判断。Tool 不接受路径参数，不递归扫描，不写回文件。
+- 你已经安装 DeepSeek Harness，并且有一个可以启动的 DSH Profile；
+- 你希望在 DSH Web UI 中粘贴日志或复盘材料后直接调用知己入口；
+- 你希望在明确配置后，让插件只读聚合指定日期范围内的 Markdown 日志；
+- 你接受结果只存在于当前 DSH 会话，不自动写入知己桌面端或正式报告目录。
 
-## 配置只读日志范围
+这个插件不适合以下需求：
 
-先在启动 DSH Profile 的同一环境中设置一个绝对日志根目录：
+- 没有安装 DSH，想单独双击或直接运行这个仓库；
+- 想让插件替你提供模型、API Key、云端日志同步或自定义 Web UI；
+- 想让它扫描任意路径、递归搜索整块磁盘或自动发现日志目录；
+- 想直接读取 D:\AI\deepseek-harness 等 DSH 源码目录。
+
+## 它提供什么
+
+| 入口 | 用途 | 默认材料 |
+| --- | --- | --- |
+| `/zhiji-daily-review` | 一天的事实、一个主要洞察、一个小行动和明天的验证 | 当前会话中粘贴的一段单日日志 |
+| `/zhiji-weekly-review` | 一周趋势、偏差、关键变化和下周验证 | 当前会话材料，或明确要求读取配置范围 |
+| `/zhiji-monthly-review` | 月度主主题、反例、关键变化和下月检查点 | 当前会话材料，或明确要求读取配置范围 |
+| `/zhiji-project-review` | 项目目标、结果、过程、偏差和后续行动 | 当前会话材料，或明确要求读取配置范围 |
+
+四个入口都区分事实、推断、建议和证据不足。材料不足时会降级，不把多篇材料机械拼成摘要，也不会自动把一次事件写成长期模式。
+
+## 安装
+
+### 前置条件
+
+- Windows、macOS 或 Linux 上可运行的 DeepSeek Harness；
+- 一个可以正常启动的 DSH Profile；
+- Node.js 22.19+ 或 24+ 只在你从源码打包或运行测试时需要；
+- 运行时不需要 DSH 源码检出目录，也不需要安装知己桌面端。
+
+### 从源码打包并安装
+
+当前仓库的 GitHub Releases 是否提供预构建 tarball，以 [Releases 页面](https://github.com/an-X550/zhiji-dsh-plugin/releases) 为准。没有 tarball 时，可以直接从源码生成：
+
+```powershell
+git clone https://github.com/an-X550/zhiji-dsh-plugin.git
+cd zhiji-dsh-plugin
+npm pack --pack-destination .\dist
+```
+
+然后把生成的包安装到目标 Profile。下面的 `web` 只是示例，请替换成你自己的 Profile 名称：
+
+```powershell
+dsh plugin --profile web add .\dist\zhiji-dsh-plugin-0.3.1.tgz
+dsh --profile web --no-open
+dsh --profile web --dump-config
+```
+
+`--dump-config` 用于确认 Profile 中已经出现 `zhiji-dsh-plugin` Bundle entry。首次安装或更新后必须重启该 Profile；只修改磁盘上的 tarball，不会自动更新已经运行的 Profile。
+
+## 第一次使用
+
+1. 启动刚刚安装插件的 DSH Profile；
+2. 打开 DSH Web UI；
+3. 粘贴一段真实材料，明确说明你想做哪一种复盘；
+4. 输入对应的 `/zhiji-*-review` 入口；
+5. 阅读会话结果，并把你认可的行动和保留意见留在自己的工作流中。
+
+例如，每日复盘可以这样使用：
+
+```text
+/zhiji-daily-review
+
+这是我今天的日志：
+- 上午完成了……
+- 下午因为……没有完成……
+- 我当时的判断是……
+```
+
+插件不会把这次结果写入 `复盘/每日反馈/`、`verified-patterns.md` 或桌面端数据目录；如果你需要正式保存，请由你决定是否手动整理或使用其他正式入口。
+
+## 可选：读取指定日期范围的本地日志
+
+默认情况下，插件只分析当前会话中你粘贴的材料。只有同时满足下面两个条件时，日志 Tool 才会读取本地文件：
+
+1. 你在启动 DSH Profile 的同一个 PowerShell 进程中设置了 `ZHIJI_DSH_LOG_ROOT`；
+2. 你在会话中明确要求读取一个日期范围。
+
+设置目录：
 
 ```powershell
 $env:ZHIJI_DSH_LOG_ROOT = 'C:\Users\you\Documents\zhiji-logs'
+dsh --profile web --no-open
 ```
 
-然后在会话中明确说明日期范围，例如：
+然后在 DSH Web UI 中明确写出起止日期，例如：
 
 ```text
 /zhiji-weekly-review
 请使用已配置日志根目录读取 2026-08-17 至 2026-08-23 的日志，完成周度复盘。
 ```
 
-Tool 只读取配置根目录的顶层 Markdown 文件：支持 `YYYY-MM-DD.md` 日志，以及文件名含年份的 Markdown 中以 `YYYY-MM-DD` 或 `M月D日` 标记的日期段。非 Markdown 文件、嵌套目录、非法日期、越界路径和无法解析的 Markdown 会明确失败；没有命中材料时返回“范围内没有可用日志材料”，由 Skill 降级，不补完整故事。
+日志 Tool 的读取规则：
 
-## 开发
+- 只读取配置根目录的顶层 Markdown，不递归进入子目录；
+- 支持文件名为 `YYYY-MM-DD.md` 的日志；
+- 也支持文件名中含年份、正文中以 `YYYY-MM-DD` 或 `M月D日` 标记日期段的 Markdown；
+- 日期范围包含起止日期；无命中材料时返回“范围内没有可用日志材料”，由 Skill 按证据不足处理；
+- 单次聚合材料上限为 120,000 字符，范围过大时请缩小日期范围；
+- 非 Markdown 文件、子目录、非法日期、越界路径或无法解析的 Markdown 会明确失败，不会猜测内容。
+
+`ZHIJI_DSH_LOG_ROOT` 不是让模型获得任意路径访问权。Tool 只接收日期，不接收会话传入的文件路径，并且会校验真实路径仍在你配置的根目录内。
+
+## 数据与安全边界
+
+这是一个 DSH 的 Node 宿主插件，安装它意味着你信任包内代码。当前插件运行时：
+
+- 不读取 API Key、凭据文件或知己桌面端数据；
+- 不启动子进程，不执行 Shell，不加载 native module；
+- 不主动联网；模型请求由 DSH Profile 的模型配置负责；
+- 只在你明确配置日志根目录并提出日期范围请求时读取顶层 Markdown；
+- 不写入日志、复盘、验证模式或项目文件；
+- 不会把配置的绝对根路径放入模型返回材料。
+
+插件本身不是 Agent sandbox。安装第三方包前，请先检查来源、版本和代码变更。
+
+## 常见问题
+
+### Skill 或 Tool 没有出现
+
+确认安装命令针对的是当前使用的 Profile，然后依次执行：
 
 ```powershell
-cd C:\path\to\zhiji-dsh-plugin
-npm test
-npm pack --pack-destination .\dist
+dsh plugin --profile web add .\dist\zhiji-dsh-plugin-0.3.1.tgz
+dsh --profile web --dump-config
 ```
 
-包没有 `install`、`prepare` 或 `build` 脚本，不含 native dependency，也不主动联网。
+确认配置中有 `zhiji-dsh-plugin` 后，重启同一个 Profile。Bundle 集合的变化不会自动注入已经运行的会话。
 
-验证脚本需要一个可运行的 DSH 源码检出目录。请通过 `-DshRoot` 传入，或设置 `DSH_SOURCE_ROOT`；该目录只用于验证，不是插件运行时依赖。
+### 日志读取失败
 
-## 安装到 DSH Profile
+确认：
 
-下面的 tarball 是示例；正式使用时替换为发布包路径或包名。`dsh plugin` 是 DSH 官方包管理入口：
+- `ZHIJI_DSH_LOG_ROOT` 在启动 DSH 的同一个 PowerShell 窗口中设置；
+- 环境变量是存在的绝对目录，不是文件，不含 `..` 路径段；
+- 目录顶层只放受支持的 Markdown 文件，不要放子目录或其他格式；
+- 请求中的日期使用 `YYYY-MM-DD`，且起始日期不晚于结束日期。
 
-```powershell
-dsh plugin --profile web add .\zhiji-dsh-plugin-0.3.1.tgz
-dsh --profile web --no-open
-```
+### 模型或 API Key 报错
 
-首次修改 Profile 的 Bundle 集合后，按 DSH 约定重启该 Profile。Web UI 中粘贴材料后输入对应 `/zhiji-*-review` 即可触发。
+插件不提供模型或凭据。先在 DSH Profile 中确认模型、API Key 和网络配置，再判断是否是插件问题。
 
-## 移除
+### 更新或移除插件
+
+更新时重新打包并对同一 Profile 执行 `add`，然后重启 Profile。移除时：
 
 ```powershell
 dsh plugin --profile web remove zhiji-dsh-plugin
 dsh --profile web --no-open
 ```
 
-移除由 DSH 官方 CLI 同时处理 dependency 和 Bundle layer；Profile 仍由 DSH 自己启动。
+## 兼容性与限制
 
-## 隐私、信任与排错
+当前 `0.3.1` 包在以下环境完成过验证：
 
-这个包是 DSH 的 Node 宿主插件，安装它代表信任包内代码；它不等同于 Agent sandbox。运行时不会读取凭据、启动子进程、执行 Shell、主动联网或访问知己桌面端。只有用户明确设置 `ZHIJI_DSH_LOG_ROOT` 并在会话中要求日期范围读取时，Tool 才会读取该目录的顶层 Markdown；日志内容只进入当前 DSH 会话，不会上传或写回正式报告。
+- DeepSeek Harness `0.1.0-rc.8`；
+- Node.js `24.18.0`；
+- 使用 DSH 官方 Bundle patch、Skill Registry 和 raw ToolDefinition 注册入口。
 
-如果 Skill 或 Tool 没有出现：
+其他 DSH 版本不能仅凭版本号推断兼容；升级 DSH 后应重新执行本地测试和实际 Profile 验证。插件当前明确不支持：
 
-1. 确认 `dsh plugin --profile <name> add <tarball>` 成功；
-2. 执行 `dsh --profile <name> --dump-config`，确认 `zhiji-dsh-plugin` Bundle entry；
-3. 按 DSH 约定重启 Profile，Bundle 集合变更不会自动改变已经运行的 Profile。
+- 递归读取日志目录；
+- 自动发现日志根目录；
+- 非 Markdown 日志格式；
+- 写回正式报告、验证库或项目验收结果；
+- 自定义 Web UI；
+- 自动提供模型、API Key 或云端同步。
 
-如果日志读取失败：确认环境变量在启动 DSH 的同一 PowerShell 进程中设置，路径为现有绝对目录，并且目录顶层只有受支持的 Markdown。Tool 不接受会话里传入的任意路径；遇到非 Markdown、嵌套目录、无日期段或非法日期会明确失败。空范围不是成功猜测，而是返回“范围内没有可用日志材料”，由 Skill 降级。
+## 开发与发布
 
-如果出现模型或 API Key 错误，那是 DSH Profile 的模型配置问题，不是插件提供模型或凭据。S1-S3 的本地验证使用测试用确定性适配器，不能替代真实模型质量验证。
+这个包没有 `install`、`prepare` 或 `build` 脚本，也没有运行时依赖。开发者可以在仓库根目录执行：
 
-## 发布准备元数据
+```powershell
+npm test
+npm pack --dry-run
+```
 
-package manifest 已包含 `dsh-plugin`、`deepseek-harness` 等关键词、公开访问声明、独立仓库地址和 Node/DSH 兼容版本。当前仓库已完成本地 tarball 验证；npm publish、GitHub Release 和外部市场提交仍需单独决定。
+`npm pack --dry-run` 应只包含插件运行需要的入口、四个 Skill、Bundle patch、README 和许可证等文件。`DSH_SOURCE_ROOT` 或验证脚本的 `-DshRoot` 参数只用于与 DSH 源码做兼容性验证，不是插件安装或运行时依赖。
 
-## 兼容版本
+## 许可证
 
-S4 package `0.3.1`（包含 S3 的运行时能力）在 DSH `0.1.0-rc.8`、上游提交 `141eb6fef83422698aef7a981029e843e8161534`、Node `v24.18.0` 和 pnpm `11.22.0` 上验证。插件不声明运行时依赖，使用 DSH 官方 Bundle patch、Skill Registry 和 raw `ToolDefinition` 注册入口，不使用 DSH 源码绝对路径或 deep import；后续 DSH 版本需要重新验证。
-
-## 已知限制
-
-- Tool 只做顶层 Markdown 的确定性日期范围聚合，不支持递归目录、其他格式、自动发现日志根目录或项目验收写入。
-- 不写入 `复盘/每日反馈/`、`verified-patterns.md` 或桌面端数据目录。
-- 不提供自定义 Web UI；结果使用 DSH Web UI 的普通会话消息。
-- 本包不提供模型或 API Key。S1-S3 的 keyless Runtime 验证使用了仅测试用的本地确定性模型适配器；真实模型效果、浏览器 UI 体验和连续用户价值仍需用户在自己的 DSH 配置中观察。
-
-## 安全边界
-
-插件注册四个 Skill 和一个 `zhiji_read_journal_range` Tool。Tool 只读取用户通过 `ZHIJI_DSH_LOG_ROOT` 显式配置的目录，且不会把绝对根路径放入模型结果；插件不读取凭据、不启动子进程、不注册 Shell、不加载 native module、不主动联网，也不调用知己桌面端或项目绝对路径。
+[MIT](LICENSE)
