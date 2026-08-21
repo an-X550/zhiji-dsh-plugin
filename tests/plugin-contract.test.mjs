@@ -15,33 +15,44 @@ test('package is a minimal DSH Bundle without install-time code or runtime depen
   const manifest = JSON.parse(await read('package.json'))
   const patch = await read('cordis.patch.yml')
   assert.equal(manifest.name, 'zhiji-dsh-plugin')
-  assert.equal(manifest.version, '0.2.0')
+  assert.equal(manifest.version, '0.3.1')
+  assert.ok(manifest.keywords.includes('dsh-plugin'))
+  assert.equal(manifest.publishConfig.access, 'public')
+  assert.equal(manifest.engines.node, '^22.19.0 || >=24.0.0')
   assert.deepEqual(manifest.dsh, { bundle: { patch: './cordis.patch.yml' } })
   assert.deepEqual(manifest.dependencies ?? {}, {})
   assert.deepEqual(manifest.optionalDependencies ?? {}, {})
   assert.equal(manifest.scripts?.install, undefined)
   assert.equal(manifest.scripts?.prepare, undefined)
   assert.match(patch, /name: zhiji-dsh-plugin/)
-  assert.match(patch, /inject: \[skills\]/)
+  assert.match(patch, /id: zhiji-dsh-plugin/)
+  assert.match(patch, /inject: \[skills, tools\]/)
 })
 
-test('registers daily and periodic embedded user- and model-invocable Skills', async () => {
+test('registers daily and periodic Skills plus one narrow journal-range Tool', async () => {
   const registrations = []
+  const tools = []
   const plugin = await import(pathToFileURL(path.join(packageRoot, 'index.js')).href)
-  plugin.apply({ skills: { register(skill) { registrations.push(skill); return () => {} } } })
+  plugin.apply({
+    skills: { register(skill) { registrations.push(skill); return () => {} } },
+    tools: { register(tool) { tools.push(tool); return () => {} } },
+  })
 
-  assert.deepEqual(plugin.inject, ['skills'])
+  assert.deepEqual(plugin.inject, ['skills', 'tools'])
   assert.equal(registrations.length, 4)
+  assert.deepEqual(tools.map((tool) => tool.name), ['zhiji_read_journal_range'])
+  assert.deepEqual(tools[0].parameters.required, ['start_date', 'end_date'])
+  assert.equal(typeof tools[0].execute, 'function')
   assert.deepEqual(registrations.map((skill) => skill.name), [
     'zhiji-daily-review',
     'zhiji-weekly-review',
     'zhiji-monthly-review',
     'zhiji-project-review',
   ])
-  for (const skill of registrations) {
+  for (const [index, skill] of registrations.entries()) {
     assert.equal(skill.source, 'bundled')
     assert.match(skill.description, /复盘/)
-    assert.match(skill.content, /不读取或扫描/)
+    assert.match(skill.content, index === 0 ? /不读取或扫描工作区/ : /不读取或扫描非显式配置的日志目录/)
     assert.match(skill.content, /证据不足/)
   }
   assert.match(registrations[0].content, /📌 事实/)
@@ -71,8 +82,10 @@ test('fixture contains a dated first-person event and the expected value shape',
 })
 
 test('runtime package contains no project-path or high-risk host capability', async () => {
-  const source = `${await read('index.js')}\n${await read('cordis.patch.yml')}\n${await read('skills/daily-review.md')}`
+  const source = `${await read('index.js')}\n${await read('read-journal-range.js')}\n${await read('cordis.patch.yml')}\n${await read('skills/daily-review.md')}`
   assert.doesNotMatch(source, /[A-Za-z]:\\|\.claude[\\/]|deepseek-harness/)
   assert.doesNotMatch(source, /child_process|spawn\(|exec\(|fetch\(|https?:\/\//)
   assert.doesNotMatch(source, /writeFile|appendFile|mkdir\(|rm\(|unlink\(/)
+  assert.match(source, /ZHIJI_DSH_LOG_ROOT/)
+  assert.match(source, /path\.relative/)
 })

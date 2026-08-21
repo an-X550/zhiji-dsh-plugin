@@ -50,9 +50,7 @@ try {
   Assert-True (@($manifest.dsh.profile.bundles) -contains 'zhiji-dsh-plugin') 'S2 Bundle missing from Profile manifest'
   $dump = Invoke-Dsh @('--profile', 'headless', '--dump-config')
   Assert-True ($dump.ExitCode -eq 0) "dump-config failed:`n$($dump.Output)"
-  foreach ($entry in @('zhiji-daily-review-skill', 'zhiji-weekly-review-skill', 'zhiji-monthly-review-skill', 'zhiji-project-review-skill')) {
-    Assert-True ($dump.Output -match $entry) "dump-config missing $entry"
-  }
+  Assert-True ($dump.Output -match 'zhiji-dsh-plugin') 'dump-config missing the consolidated Bundle entry'
   Write-Output '[load] daily, weekly, monthly and project Skills are loaded'
 
   New-Item -ItemType Directory -Path $profileFixtureRoot -Force | Out-Null

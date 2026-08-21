@@ -73,8 +73,7 @@ try {
   $dump = Invoke-Dsh @('--profile', 'headless', '--dump-config')
   Assert-True ($dump.ExitCode -eq 0) "official dump-config failed:`n$($dump.Output)"
   Assert-True ($dump.Output -match 'zhiji-dsh-plugin') 'dump-config did not show the Bundle layer'
-  Assert-True ($dump.Output -match 'zhiji-daily-review-skill') 'dump-config did not show the Skill entry'
-  Write-Output "[dump-config] Bundle and Skill entries are present"
+  Write-Output "[dump-config] Bundle and Skill entry are present"
 
   New-Item -ItemType Directory -Path $profileFixtureRoot -Force | Out-Null
   Copy-Item -LiteralPath (Join-Path $fixtureRoot 'dsh-mock-llm.mjs') -Destination (Join-Path $profileFixtureRoot 'dsh-mock-llm.mjs') -Force

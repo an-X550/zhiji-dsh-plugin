@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs'
+import { createJournalRangeTool } from './read-journal-range.js'
 
 const skillNames = ['daily-review', 'weekly-review', 'monthly-review', 'project-review']
 const skills = skillNames.map((skillName) => {
@@ -14,7 +15,7 @@ const skills = skillNames.map((skillName) => {
 })
 
 export const name = 'zhiji-dsh-plugin'
-export const inject = ['skills']
+export const inject = ['skills', 'tools']
 
 export function apply(ctx) {
   for (const skill of skills) {
@@ -23,4 +24,5 @@ export function apply(ctx) {
       source: 'bundled',
     })
   }
+  ctx.tools.register(createJournalRangeTool())
 }

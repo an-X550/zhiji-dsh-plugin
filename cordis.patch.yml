@@ -1,16 +1,7 @@
-# The zhiji Bundle registers four embedded runtime Skills.
-# DSH base already provides the skills registry, skill catalog/tool, and Web
-# user-invocation surface; this package contributes no host Tool or UI row.
+# The zhiji Bundle registers four embedded runtime Skills and one narrowly
+# scoped read-only journal-range Tool. DSH base already provides the skill
+# catalog/tool and Web user-invocation surface; this package contributes no UI.
 - insert:
-    - id: zhiji-daily-review-skill
+    - id: zhiji-dsh-plugin
       name: zhiji-dsh-plugin
-      inject: [skills]
-    - id: zhiji-weekly-review-skill
-      name: zhiji-dsh-plugin
-      inject: [skills]
-    - id: zhiji-monthly-review-skill
-      name: zhiji-dsh-plugin
-      inject: [skills]
-    - id: zhiji-project-review-skill
-      name: zhiji-dsh-plugin
-      inject: [skills]
+      inject: [skills, tools]

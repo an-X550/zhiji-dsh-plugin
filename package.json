@@ -1,11 +1,22 @@
 {
   "name": "zhiji-dsh-plugin",
-  "version": "0.2.0",
+  "version": "0.3.1",
   "description": "知己每日、周、月和项目复盘的 DeepSeek Harness Bundle",
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "zhiji",
+    "journal-review",
+    "daily-review"
+  ],
   "type": "module",
   "main": "index.js",
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
   "files": [
     "index.js",
+    "read-journal-range.js",
     "cordis.patch.yml",
     "skills/daily-review.md",
     "skills/weekly-review.md",
@@ -19,7 +30,19 @@
     }
   },
   "scripts": {
-    "test": "node --test tests/plugin-contract.test.mjs"
+    "test": "node --test tests/plugin-contract.test.mjs tests/range-reader.test.mjs"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/an-X550/knowing-yourself.git",
+    "directory": "apps/zhiji-dsh-plugin"
+  },
+  "bugs": {
+    "url": "https://github.com/an-X550/knowing-yourself/issues"
+  },
+  "homepage": "https://github.com/an-X550/knowing-yourself/tree/main/apps/zhiji-dsh-plugin"
 }
