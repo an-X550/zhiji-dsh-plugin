@@ -1,9 +1,8 @@
 {
   "name": "zhiji-dsh-plugin",
   "version": "0.3.1",
-  "description": "ReflectLoop（知己）每日、周、月和项目复盘的 DeepSeek Harness Bundle",
+  "description": "zhiji（知己）每日、周、月和项目复盘的 DeepSeek Harness Bundle",
   "keywords": [
-    "reflectloop",
     "dsh-plugin",
     "deepseek-harness",
     "zhiji",
@@ -39,10 +38,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/an-X550/Reflectloop-DSH-Plugin.git"
+    "url": "git+https://github.com/an-X550/zhiji-DSH-Plugin.git"
   },
   "bugs": {
-    "url": "https://github.com/an-X550/Reflectloop-DSH-Plugin/issues"
+    "url": "https://github.com/an-X550/zhiji-DSH-Plugin/issues"
   },
-  "homepage": "https://github.com/an-X550/Reflectloop-DSH-Plugin"
+  "homepage": "https://github.com/an-X550/zhiji-DSH-Plugin"
 }
