@@ -1,8 +1,9 @@
 {
   "name": "zhiji-dsh-plugin",
   "version": "0.3.1",
-  "description": "知己每日、周、月和项目复盘的 DeepSeek Harness Bundle",
+  "description": "ReflectLoop（知己）每日、周、月和项目复盘的 DeepSeek Harness Bundle",
   "keywords": [
+    "reflectloop",
     "dsh-plugin",
     "deepseek-harness",
     "zhiji",

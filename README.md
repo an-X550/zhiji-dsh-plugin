@@ -1,14 +1,16 @@
-# 知己 DSH Plugin
+# ReflectLoop DSH Plugin（知己 DSH 插件）
 
 > 为 DeepSeek Harness 增加四个有证据边界的复盘 Skill，以及一个受控的只读日志范围 Tool。
 
-`zhiji-dsh-plugin` 是一个安装到 DSH Profile 的 Node 插件包。它把知己的每日、每周、每月和项目复盘入口注册到 DSH Web UI；它不提供模型、API Key 或独立 Web UI，也不依赖知己 Windows 桌面端才能运行。
+`zhiji-dsh-plugin` 是一个安装到 DSH Profile 的 ReflectLoop（知己）Node 插件包。它把每日、每周、每月和项目复盘入口注册到 DSH Web UI；它不提供模型、API Key 或独立 Web UI，也不依赖知己 Windows 桌面端才能运行。
 
 - 当前包版本：`0.3.1`
 - [GitHub 仓库](https://github.com/an-X550/zhiji-dsh-plugin)
 - [下载与 Releases](https://github.com/an-X550/zhiji-dsh-plugin/releases)
 - [提交问题](https://github.com/an-X550/zhiji-dsh-plugin/issues)
 - 许可证：MIT，见 [LICENSE](LICENSE)
+
+在 ReflectLoop 体系中，主仓库是产品与 Skill/CLI 运行入口，用户版仓库是可复制的 Agent Skill 工作区，Desktop Agent 是 Windows 应用；本仓库只负责 DSH 适配。四个仓库不会自动共享日志或会话结果。
 
 ## 先判断它是否适合你
 
