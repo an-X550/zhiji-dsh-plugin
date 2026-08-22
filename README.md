@@ -10,6 +10,8 @@
 - [提交问题](https://github.com/an-X550/zhiji-dsh-plugin/issues)
 - 许可证：MIT，见 [LICENSE](LICENSE)
 
+相关入口：[ReflectLoop 主仓库](https://github.com/an-X550/Reflectloop) · [ReflectLoop Desktop Agent](https://github.com/an-X550/Reflectloop-Desktop-Agent) · [知己用户版分发包](https://github.com/an-X550/knowing-yourself-zhiji-user)
+
 在 ReflectLoop 体系中，主仓库是产品与 Skill/CLI 运行入口，用户版仓库是可复制的 Agent Skill 工作区，Desktop Agent 是 Windows 应用；本仓库只负责 DSH 适配。四个仓库不会自动共享日志或会话结果。
 
 ## 先判断它是否适合你
