@@ -39,10 +39,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/an-X550/zhiji-dsh-plugin.git"
+    "url": "git+https://github.com/an-X550/Reflectloop-DSH-Plugin.git"
   },
   "bugs": {
-    "url": "https://github.com/an-X550/zhiji-dsh-plugin/issues"
+    "url": "https://github.com/an-X550/Reflectloop-DSH-Plugin/issues"
   },
-  "homepage": "https://github.com/an-X550/zhiji-dsh-plugin"
+  "homepage": "https://github.com/an-X550/Reflectloop-DSH-Plugin"
 }

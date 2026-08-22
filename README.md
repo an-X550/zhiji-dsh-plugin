@@ -5,12 +5,12 @@
 `zhiji-dsh-plugin` 是一个安装到 DSH Profile 的 ReflectLoop（知己）Node 插件包。它把每日、每周、每月和项目复盘入口注册到 DSH Web UI；它不提供模型、API Key 或独立 Web UI，也不依赖知己 Windows 桌面端才能运行。
 
 - 当前包版本：`0.3.1`
-- [GitHub 仓库](https://github.com/an-X550/zhiji-dsh-plugin)
-- [下载与 Releases](https://github.com/an-X550/zhiji-dsh-plugin/releases)
-- [提交问题](https://github.com/an-X550/zhiji-dsh-plugin/issues)
+- [GitHub 仓库](https://github.com/an-X550/Reflectloop-DSH-Plugin)
+- [下载与 Releases](https://github.com/an-X550/Reflectloop-DSH-Plugin/releases)
+- [提交问题](https://github.com/an-X550/Reflectloop-DSH-Plugin/issues)
 - 许可证：MIT，见 [LICENSE](LICENSE)
 
-相关入口：[ReflectLoop 主仓库](https://github.com/an-X550/Reflectloop) · [ReflectLoop Desktop Agent](https://github.com/an-X550/Reflectloop-Desktop-Agent) · [知己用户版分发包](https://github.com/an-X550/knowing-yourself-zhiji-user)
+相关入口：[ReflectLoop 主仓库](https://github.com/an-X550/Reflectloop) · [ReflectLoop Desktop Agent](https://github.com/an-X550/Reflectloop-Desktop-Agent) · [ReflectLoop Agent Skill](https://github.com/an-X550/Reflectloop-Agent-Skill)
 
 在 ReflectLoop 体系中，主仓库是产品与 Skill/CLI 运行入口，用户版仓库是可复制的 Agent Skill 工作区，Desktop Agent 是 Windows 应用；本仓库只负责 DSH 适配。四个仓库不会自动共享日志或会话结果。
 
@@ -52,11 +52,11 @@
 
 ### 从源码打包并安装
 
-当前仓库的 GitHub Releases 是否提供预构建 tarball，以 [Releases 页面](https://github.com/an-X550/zhiji-dsh-plugin/releases) 为准。没有 tarball 时，可以直接从源码生成：
+当前仓库的 GitHub Releases 是否提供预构建 tarball，以 [Releases 页面](https://github.com/an-X550/Reflectloop-DSH-Plugin/releases) 为准。没有 tarball 时，可以直接从源码生成：
 
 ```powershell
-git clone https://github.com/an-X550/zhiji-dsh-plugin.git
-cd zhiji-dsh-plugin
+git clone https://github.com/an-X550/Reflectloop-DSH-Plugin.git
+cd Reflectloop-DSH-Plugin
 npm pack --pack-destination .\dist
 ```
 
